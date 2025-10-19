@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>课堂评价系统</title>
+    <script src="https://cdn.tailwindcss.com/3.3.3"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <style>
+        .star {
+            cursor: grab;
+            font-size: 24px;
+            transition: all 0.2s;
+        }
+        .star:hover {
+            transform: scale(1.2);
+        }
+        .star-placed {
+            color: #3b82f6;
+        }
+        .star-unplaced {
+            color: #9ca3af;
+        }
+        .drop-zone {
+            min-height: 40px;
+            border: 1px dashed #d1d5db;
+            transition: all 0.2s;
+        }
+        .drop-zone.highlight {
+            background-color: #f0f9ff;
+            border-color: #3b82f6;
+        }
+        .star-bank {
+            display: flex;
+            overflow-x: auto;
+            gap: 12px;
+            padding: 8px 0;
+        }
+        .star-bank::-webkit-scrollbar {
+            height: 6px;
+        }
+        .star-bank::-webkit-scrollbar-thumb {
+            background-color: #d1d5db;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body class="bg-white text-gray-800 font-sans">
+    <div class="max-w-3xl mx-auto p-4 md:p-6 space-y-6">
+        <!-- 标题区 -->
+        <h1 class="text-3xl font-bold text-center text-blue-600 mb-8">初识人工智能</h1>
+        
+        <!-- 基本信息区 -->
+        <div class="space-y-4 border-b pb-6">
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">第几小组</label>
+                <input type="text" placeholder="第1小组" class="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                <p class="text-xs text-gray-500 mt-1">示例：第1小组</p>
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">班级</label>
+                <input type="text" placeholder="三年级(2)班" class="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                <p class="text-xs text-gray-500 mt-1">示例：三年级(2)班</p>
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">姓名</label>
+                <input type="text" placeholder="请输入姓名" class="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                <p class="text-xs text-gray-500 mt-1">提示：请输入姓名</p>
+            </div>
+        </div>
+        
+        <!-- 评价说明区 -->
+        <div class="bg-blue-100 p-4 rounded-lg">
+            <p class="text-blue-800 font-medium">评价说明：请从下方星星库中拖动星星到对应的评价栏目中，五颗星为最高评价。</p>
+        </div>
+        
+        <!-- 自评区域 -->
+        <div class="space-y-4 border-b pb-6">
+            <h2 class="text-xl font-bold">自评</h2>
+            
+            <div class="flex items-center justify-between">
+                <span>了解AI的"光明"与"黑暗"</span>
+                <div class="drop-zone w-[200px] h-[40px] flex items-center justify-center" data-item="self1"></div>
+            </div>
+            
+            <div class="flex items-center justify-between">
+                <span>知道防范AI风险的"三不原则"</span>
+                <div class="drop-zone w-[200px] h-[40px] flex items-center justify-center" data-item="self2"></div>
+            </div>
+            
+            <div class="flex items-center justify-between">
+                <span>会用"智能体"完成简单创作</span>
+                <div class="drop-zone w-[200px] h-[40px] flex items-center justify-center" data-item="self3"></div>
+            </div>
+            
+            <div class="flex items-center justify-between">
+                <span>在课堂活动积极参与</span>
+                <div class="drop-zone w-[200px] h-[40px] flex items-center justify-center" data-item="self4"></div>
+            </div>
+        </div>
+        
+        <!-- 小组评区域 -->
+        <div class="space-y-4 border-b pb-6">
+            <h2 class="text-xl font-bold">小组评</h2>
+            
+            <div class="flex items-center justify-between">
+                <span>在小组任务中积极参与，互帮互助</span>
+                <div class="drop-zone w-[200px] h-[40px] flex items-center justify-center" data-item="group1"></div>
+            </div>
+        </div>
+        
+        <!-- 星星库区域 -->
+        <div class="border-2 border-dashed border-blue-300 p-4 rounded-lg">
+            <h2 class="text-xl font-bold mb-4">星星库</h2>
+            <div class="star-bank" id="starBank">
+                <!-- 星星将通过JS动态生成 -->
+            </div>
+        </div>
+        
+        <!-- 评价标准区 -->
+        <div class="bg-amber-50 p-4 rounded-lg border border-amber-200">
+            <h2 class="text-xl font-bold mb-4">评价标准</h2>
+            <div class="space-y-3">
+                <div>
+                    <p class="font-medium">5星：掌握极好/参与度极高</p>
+                    <p class="text-sm">对知识完全掌握，能灵活应用；在活动/任务中积极且高质量参与，是团队核心力量。</p>
+                </div>
+                <div>
+                    <p class="font-medium">3-4星：掌握较好/参与度较好</p>
+                    <p class="text-sm">对知识有较好的理解与应用能力；在活动/任务中能有效参与，能完成核心工作或提供有价值贡献。</p>
+                </div>
+                <div>
+                    <p class="font-medium">1-2星：待提升</p>
+                    <p class="text-sm">对知识的掌握存在明显不足，需加强学习；在活动/任务中参与度低，对团队贡献有限，需提升参与意识与能力。</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 提交按钮 -->
+        <div class="flex justify-center mt-8">
+            <button id="submitBtn" class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-6 rounded w-[200px] transition-colors">
+                提交评价
+            </button>
+        </div>
+        
+        <!-- 成功提示框 (初始隐藏) -->
+        <div id="successAlert" class="hidden bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative">
+            <span class="block sm:inline">评价已提交，智能体正在生成建议...</span>
+        </div>
+    </div>
+
+    <footer class="text-center text-gray-500 text-sm py-6">
+        <p>created by <a href="https://space.coze.cn" class="text-blue-500 hover:underline">coze space</a></p>
+        <p>页面内容均由 AI 生成，仅供参考</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 生成星星库
+            const starBank = document.getElementById('starBank');
+            for (let i = 0; i < 20; i++) {
+                const star = document.createElement('span');
+                star.className = 'star star-unplaced';
+                star.innerHTML = '★';
+                star.draggable = true;
+                star.dataset.id = `star-${i}`;
+                star.addEventListener('dragstart', dragStart);
+                starBank.appendChild(star);
+            }
+            
+            // 设置拖拽事件
+            const dropZones = document.querySelectorAll('.drop-zone');
+            dropZones.forEach(zone => {
+                zone.addEventListener('dragover', dragOver);
+                zone.addEventListener('dragenter', dragEnter);
+                zone.addEventListener('dragleave', dragLeave);
+                zone.addEventListener('drop', drop);
+            });
+            
+            // 提交按钮事件
+            document.getElementById('submitBtn').addEventListener('click', submitEvaluation);
+            
+            // 拖拽相关函数
+            let draggedStar = null;
+            
+            function dragStart(e) {
+                draggedStar = e.target;
+                e.dataTransfer.setData('text/plain', e.target.dataset.id);
+                setTimeout(() => {
+                    e.target.classList.add('opacity-0');
+                }, 0);
+            }
+            
+            function dragOver(e) {
+                e.preventDefault();
+            }
+            
+            function dragEnter(e) {
+                e.preventDefault();
+                e.target.classList.add('highlight');
+            }
+            
+            function dragLeave(e) {
+                e.target.classList.remove('highlight');
+            }
+            
+            function drop(e) {
+                e.preventDefault();
+                e.target.classList.remove('highlight');
+                
+                const starId = e.dataTransfer.getData('text/plain');
+                const star = document.querySelector(`[data-id="${starId}"]`);
+                
+                // 检查放置区是否已有5颗星
+                if (e.target.children.length >= 5) {
+                    alert('最多只能放置5颗星星');
+                    star.classList.remove('opacity-0');
+                    return;
+                }
+                
+                // 克隆星星并添加到放置区
+                const newStar = star.cloneNode(true);
+                newStar.classList.remove('opacity-0');
+                newStar.classList.remove('star-unplaced');
+                newStar.classList.add('star-placed');
+                newStar.draggable = true;
+                newStar.addEventListener('dragstart', dragStart);
+                
+                // 添加删除功能（拖回星星库）
+                newStar.addEventListener('click', function() {
+                    this.remove();
+                    // 将星星放回星星库
+                    const originalStar = document.querySelector(`[data-id="${this.dataset.id}"]`);
+                    originalStar.classList.remove('opacity-0');
+                });
+                
+                e.target.appendChild(newStar);
+                
+                // 隐藏原始星星
+                star.classList.add('hidden');
+            }
+            
+            // 提交评价
+            function submitEvaluation() {
+                // 验证基本信息
+                const group = document.querySelector('input[placeholder="第1小组"]').value.trim();
+                const className = document.querySelector('input[placeholder="三年级(2)班"]').value.trim();
+                const name = document.querySelector('input[placeholder="请输入姓名"]').value.trim();
+                
+                if (!group || !className || !name) {
+                    alert('请填写完整的基本信息');
+                    return;
+                }
+                
+                // 收集评价数据
+                const evaluationData = {
+                    group: group,
+                    class: className,
+                    name: name,
+                    selfEvaluation: {},
+                    groupEvaluation: 0
+                };
+                
+                // 自评数据
+                const selfItems = ['self1', 'self2', 'self3', 'self4'];
+                let allRated = true;
+                
+                selfItems.forEach(item => {
+                    const stars = document.querySelector(`.drop-zone[data-item="${item}"]`).children.length;
+                    evaluationData.selfEvaluation[item] = stars;
+                    
+                    if (stars === 0) {
+                        allRated = false;
+                    }
+                });
+                
+                // 小组评数据
+                const groupStars = document.querySelector('.drop-zone[data-item="group1"]').children.length;
+                evaluationData.groupEvaluation = groupStars;
+                
+                if (groupStars === 0) {
+                    allRated = false;
+                }
+                
+                if (!allRated) {
+                    alert('请为所有评价项目评分');
+                    return;
+                }
+                
+                // 显示成功提示
+                console.log('评价数据:', evaluationData);
+                document.getElementById('successAlert').classList.remove('hidden');
+                document.getElementById('successAlert').scrollIntoView({ behavior: 'smooth' });
+            }
+        });
+    </script>
+</body>
+</html>
