@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>班级姓名输入</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: "Microsoft YaHei", "Segoe UI", sans-serif;
+            background-color: #f5f5f5;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background-color: white;
+            width: 100%;
+            max-width: 500px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        h1 {
+            font-size: 22px;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+        
+        .subtitle {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        
+        .form-container {
+            padding: 25px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: 500;
+            font-size: 15px;
+        }
+        
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+        
+        input:focus {
+            outline: none;
+            border-color: #4CAF50;
+            box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.2);
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 12px;
+            margin-top: 25px;
+        }
+        
+        button {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .submit-btn {
+            background-color: #4CAF50;
+            color: white;
+        }
+        
+        .submit-btn:hover {
+            background-color: #45a049;
+        }
+        
+        .reset-btn {
+            background-color: #f5f5f5;
+            color: #555;
+            border: 1px solid #ddd;
+        }
+        
+        .reset-btn:hover {
+            background-color: #e0e0e0;
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+            color: #777;
+            font-size: 13px;
+            padding: 15px;
+            border-top: 1px solid #eee;
+        }
+        
+        .student-icon {
+            display: block;
+            margin: 0 auto 10px;
+            font-size: 28px;
+        }
+        
+        @media (max-width: 480px) {
+            .container {
+                border-radius: 6px;
+            }
+            
+            .form-container {
+                padding: 20px;
+            }
+            
+            .button-group {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="student-icon">👨‍🎓</div>
+            <h1>班级姓名输入</h1>
+            <p class="subtitle">请输入您的信息，开始自我评价</p>
+        </div>
+        
+        <div class="form-container">
+            <form id="infoForm">
+                <div class="form-group">
+                    <label for="class">班级:</label>
+                    <input type="text" id="class" name="class" placeholder="例如：三年二班、3年2班、302班、2班" required>
+                </div>
+                <div class="form-group">
+                    <label for="name">姓名:</label>
+                    <input type="text" id="name" name="name" placeholder="请输入您的姓名" required>
+                </div>
+                
+                <div class="button-group">
+                    <button type="submit" class="submit-btn">进入自评系统</button>
+                    <button type="reset" class="reset-btn">重置信息</button>
+                </div>
+            </form>
+        </div>
+        
+        <div class="footer">
+            提交后将自动跳转到自我评价系统
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('infoForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const classVal = document.getElementById('class').value.trim();
+            const nameVal = document.getElementById('name').value.trim();
+            
+            // 验证输入
+            if (!classVal || !nameVal) {
+                alert('班级和姓名不能为空！');
+                return;
+            }
+            
+            // 验证姓名格式（只允许中文和英文）
+            if (!/^[\u4e00-\u9fa5a-zA-Z]+$/.test(nameVal)) {
+                alert('姓名只能包含中文或英文字母！');
+                return;
+            }
+            
+            // 班级格式验证 - 接受各种格式
+            const classPattern = /^([\u4e00-\u9fa5\d]+年?)?[\u4e00-\u9fa5\d]*班?$/;
+            if (!classPattern.test(classVal)) {
+                alert('班级格式不正确！请参考示例格式。');
+                return;
+            }
+            
+            // 如果班级不包含"班"字，询问用户确认
+            if (!classVal.includes('班')) {
+                if (!confirm(`您输入的班级是"${classVal}"，确定正确吗？`)) {
+                    return;
+                }
+            }
+            
+            proceedToEvaluation(classVal, nameVal);
+        });
+        
+        function proceedToEvaluation(classVal, nameVal) {
+            // 显示成功消息
+            alert(`信息提交成功！\n班级：${classVal}\n姓名：${nameVal}\n\n即将进入自我评价系统...`);
+            
+            // 跳转到工作流URL，传递班级和姓名参数
+            const workflowURL = `https://www.coze.cn/work_flow?workflow_id=7562853274899791881&space_id=7487049317376229417&class=${encodeURIComponent(classVal)}&name=${encodeURIComponent(nameVal)}`;
+            window.location.href = workflowURL;
+        }
+        
+        // 重置按钮功能增强
+        document.querySelector('.reset-btn').addEventListener('click', function() {
+            document.getElementById('class').focus();
+        });
+    </script>
+</body>
+</html>
