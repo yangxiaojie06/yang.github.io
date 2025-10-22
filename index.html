@@ -1,56 +1,42 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
-<头>
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>纯淡绿色背景</title>
-    <样式>
-        *  {
-            边距：0;
-            
-            box-sizing: border-box;
+    <title>安仔4.0版</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html, body { height: 100%; overflow: hidden; }
+        #chat-container { 
+            width: 100% !important; 
+            height: 100% !important; 
+            max-width: none !important; 
+            border: none !important; 
+            box-shadow: none !important; 
         }
-        body {
-            background-color: #e8f5e9; /* 淡绿色背景 */
-            min-height: 100vh;
-            width: 100%;
-            padding: 20px; /* 添加内边距避免聊天框贴边 */
-        }
-        /* 聊天容器样式 */
-
-            width: 100%;
-            max-width: 600px; /* 限制最大宽度 */
-            height: 500px;
-            margin: 0 auto; /* 居中显示 */
-            border: 1px solid #ddd;
-            边框半径：8像素;
-            box-shadow：0 2px 10px rgba(0,0,0,0.1);
-        }
-    </样式>
-</头>
-<身体>
-    
+    </style>
+</head>
+<body>
     <div id="chat-container"></div>
 
-    
     <script src="https://lf-cdn.coze.cn/obj/unpkg/flow-platform/chat-app-sdk/1.2.0-beta.10/libs/cn/index.js"></script>
-    <脚本>
-        新 CozeWebSDK.WebChatClient({
-            配置：｛
-                bot_id: '7561411554915565577', // 你的botId（无需修改）
+    <script>
+        new CozeWebSDK.WebChatClient({
+            config: { bot_id: '7561411554915565577' },
+            componentProps: { 
+                title: '安仔4.0版', 
+                container: '#chat-container',
+                quickReplies: [{ label: '自我评价', value: '自我评价' }],
+                mode: "embed" // 强制嵌入式模式
             },
-            组件属性：{
-                标题：'网络小卫士安仔'，// 可自定义聊天窗口标题
-                容器：'#chat-container'，// 绑定到容器ID
-            },
-            认证：{
-                类型：'令牌'，
-                令牌：'pat_JSB7gspJfeLVgBwpkFJHjmTah3GK8omgGIGYPO2uYkVQDOuplIBdBJk6qG80c0FG'，// 替换为实际PAT
-                onRefreshToken：函数（） ｛
-                    返回 'pat_JSB7gspJfeLVgBwpkFJHjmTah3GK8omgGIGYPO2uYkVQDOuplIBdBJk6qG80c0FG'; // 与上方tok一致
-                }  // 在这里添加了缺失的闭合大括号
+            auth: {
+                type: 'token',
+                token: 'pat_JSB7gspJfeLVgBwpkFJHjmTah3GK8omgGIGYPO2uYkVQDOuplIBdBJk6qG80c0FG',
+                onRefreshToken: function() { 
+                    return 'pat_JSB7gspJfeLVgBwpkFJHjmTah3GK8omgGIGYPO2uYkVQDOuplIBdBJk6qG80c0FG'; 
+                }
             }
         });
-    </脚本>
-</身体>
+    </script>
+</body>
 </html>
