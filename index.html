@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
-<head>
+<头>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>纯淡绿色背景</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
+    <样式>
+        *  {
+            边距：0;
+            
             box-sizing: border-box;
         }
         body {
@@ -17,40 +17,40 @@
             padding: 20px; /* 添加内边距避免聊天框贴边 */
         }
         /* 聊天容器样式 */
-        #chat-container {
+
             width: 100%;
             max-width: 600px; /* 限制最大宽度 */
             height: 500px;
             margin: 0 auto; /* 居中显示 */
             border: 1px solid #ddd;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            边框半径：8像素;
+            box-shadow：0 2px 10px rgba(0,0,0,0.1);
         }
-    </style>
-</head>
-<body>
-    <!-- 聊天容器 -->
+    </样式>
+</头>
+<身体>
+    
     <div id="chat-container"></div>
 
-    <!-- 扣子Chat SDK（免登录模式） -->
+    
     <script src="https://lf-cdn.coze.cn/obj/unpkg/flow-platform/chat-app-sdk/1.2.0-beta.10/libs/cn/index.js"></script>
-    <script>
-        new CozeWebSDK.WebChatClient({
-            config: {
+    <脚本>
+        新 CozeWebSDK.WebChatClient({
+            配置：｛
                 bot_id: '7561411554915565577', // 你的botId（无需修改）
             },
-            componentProps: {
-                title: 'Coze智能助手', // 可自定义聊天窗口标题
-                container: '#chat-container', // 绑定到容器ID
+            组件属性：{
+                标题：'网络小卫士安仔'，// 可自定义聊天窗口标题
+                容器：'#chat-container'，// 绑定到容器ID
             },
-            auth: {
-                type: 'token',
-                token: 'pat_JSB7gspJfeLVgBwpkFJHjmTah3GK8omgGIGYPO2uYkVQDOuplIBdBJk6qG80c0FG', // 替换为实际PAT
-                onRefreshToken: function() {
-                    return 'pat_JSB7gspJfeLVgBwpkFJHjmTah3GK8omgGIGYPO2uYkVQDOuplIBdBJk6qG80c0FG'; // 与上方token一致
-                }  // 这里添加了缺失的闭合大括号
+            认证：{
+                类型：'令牌'，
+                令牌：'pat_JSB7gspJfeLVgBwpkFJHjmTah3GK8omgGIGYPO2uYkVQDOuplIBdBJk6qG80c0FG'，// 替换为实际PAT
+                onRefreshToken：函数（） ｛
+                    返回 'pat_JSB7gspJfeLVgBwpkFJHjmTah3GK8omgGIGYPO2uYkVQDOuplIBdBJk6qG80c0FG'; // 与上方tok一致
+                }  // 在这里添加了缺失的闭合大括号
             }
         });
-    </script>
-</body>
+    </脚本>
+</身体>
 </html>
